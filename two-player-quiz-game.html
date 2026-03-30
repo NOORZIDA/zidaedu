@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Two Player Quiz Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+        }
+        .player {
+            width: 50%;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .player1 {
+            background-color: #f1f1f1;
+        }
+        .player2 {
+            background-color: #e2e2e2;
+        }
+        h1 {
+            text-align: center;
+        }
+        .question {
+            font-size: 20px;
+        }
+        .buttons {
+            margin: 20px 0;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        .score {
+            font-size: 24px;
+            margin-top: 20px;
+        }
+        @media (max-width: 768px) {
+            .player {
+                width: 100%;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="player player1">
+        <h1>Player 1</h1>
+        <div class="score">Score: <span id="score1">0</span></div>
+        <div class="question" id="question1"></div>
+        <div class="buttons">
+            <button onclick="checkAnswer(1, 'A')">A</button>
+            <button onclick="checkAnswer(1, 'B')">B</button>
+            <button onclick="checkAnswer(1, 'C')">C</button>
+            <button onclick="checkAnswer(1, 'D')">D</button>
+        </div>
+    </div>
+    <div class="player player2">
+        <h1>Player 2</h1>
+        <div class="score">Score: <span id="score2">0</span></div>
+        <div class="question" id="question2"></div>
+        <div class="buttons">
+            <button onclick="checkAnswer(2, 'A')">A</button>
+            <button onclick="checkAnswer(2, 'B')">B</button>
+            <button onclick="checkAnswer(2, 'C')">C</button>
+            <button onclick="checkAnswer(2, 'D')">D</button>
+        </div>
+    </div>
+    <script>
+        const questions = [
+            { question: 'What is the capital of France?', answers: { A: 'Paris', B: 'London', C: 'Berlin', D: 'Madrid' }, correct: 'A' },
+            { question: 'What is 2 + 2?', answers: { A: '3', B: '4', C: '5', D: '6' }, correct: 'B' },
+            { question: 'Which planet is known as the Red Planet?', answers: { A: 'Earth', B: 'Mars', C: 'Jupiter', D: 'Saturn' }, correct: 'B' },
+            { question: 'What is the largest ocean on Earth?', answers: { A: 'Atlantic', B: 'Indian', C: 'Arctic', D: 'Pacific' }, correct: 'D' },
+            { question: 'What is the chemical symbol for water?', answers: { A: 'O2', B: 'H2O', C: 'CO2', D: 'NaCl' }, correct: 'B' }
+        ];
+        let score1 = 0;
+        let score2 = 0;
+        let currentQuestionIndex1 = 0;
+        let currentQuestionIndex2 = 0;
+
+        function loadQuestion(player) {
+            let questionIndex;
+            if (player === 1) {
+                questionIndex = currentQuestionIndex1;
+                document.getElementById('score1').innerText = score1;
+            } else {
+                questionIndex = currentQuestionIndex2;
+                document.getElementById('score2').innerText = score2;
+            }
+            let questionData = questions[questionIndex];
+            document.getElementById(`question${player}`).innerText = questionData.question;
+            currentQuestionIndex1 = (currentQuestionIndex1 + 1) % questions.length;
+            currentQuestionIndex2 = (currentQuestionIndex2 + 1) % questions.length;
+        }
+
+        function checkAnswer(player, answer) {
+            const questionIndex = player === 1 ? currentQuestionIndex1 - 1 : currentQuestionIndex2 - 1;
+            const correctAnswer = questions[questionIndex].correct;
+            if (answer === correctAnswer) {
+                alert('Correct!');
+                if (player === 1) {
+                    score1++;
+                } else {
+                    score2++;
+                }
+            } else {
+                alert('Wrong! The correct answer was ' + correctAnswer + '.');
+            }
+            loadQuestion(player);
+        }
+
+        loadQuestion(1);
+        loadQuestion(2);
+    </script>
+</body>
+</html>
